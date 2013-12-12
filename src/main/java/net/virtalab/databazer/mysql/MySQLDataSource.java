@@ -33,6 +33,8 @@ public class MySQLDataSource extends NamedDataSource {
         private static final String DEFAULT_USER = "root";
         private static final String DEFAULT_PASSWORD = "";
 
+        private static final Class<? extends Driver> DEFAULT_DRIVER = com.mysql.jdbc.Driver.class;
+
         private Map<String,Integer> hosts = new LinkedHashMap<String, Integer>();
         private Map<String,String> options = new HashMap<String, String>();
 
@@ -46,7 +48,7 @@ public class MySQLDataSource extends NamedDataSource {
 
         //params that override other optional params if set
         private Driver driver;
-        private Class<? extends Driver> driverClass;
+        private Class<? extends Driver> driverClass = DEFAULT_DRIVER;
         private String url;
 
         public Creator(){}
