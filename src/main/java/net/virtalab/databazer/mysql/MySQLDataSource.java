@@ -133,6 +133,9 @@ public class MySQLDataSource extends NamedDataSource {
     }
 
     private MySQLDataSource(Creator creator){
+        //connection name
+        this.setName(creator.name);
+
         //drivers
         if(creator.driver!=null){ this.setDriver(creator.driver); }
         if(creator.driverClass!=null){ this.setDriverClass(creator.driverClass); }

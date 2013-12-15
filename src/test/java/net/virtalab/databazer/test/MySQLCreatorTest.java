@@ -17,6 +17,17 @@ public class MySQLCreatorTest extends Assert {
         String actualUrl = ds.getUrl();
         assertEquals(exceptedUrl,actualUrl);
     }
+
+    @Test
+    public void namedDataSource(){
+        MySQLDataSource ds = new MySQLDataSource.Creator().name("myDS").create();
+
+        String expectedName = "myDS";
+        String actualName = ds.getName();
+
+        assertEquals(expectedName,actualName);
+    }
+
     @Test
     public void customUrl(){
         String url = "jdbc:mysql://127.0.0.2:3306/myDB";
