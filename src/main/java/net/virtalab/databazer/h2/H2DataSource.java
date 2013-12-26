@@ -12,11 +12,12 @@ import java.util.Map;
 
 public class H2DataSource extends NamedDataSource {
     /**
-     * Constuctor invoked by Spring when creating bean. Sets default values.
+     * Constructor invoked by Spring when creating bean. Sets default values.
      */
     public H2DataSource(){
         this.setName("default");
         this.setDriverClass(org.h2.Driver.class);
+        this.setUrl("jdbc:h2:mem:");
         this.setUsername("sa");
         this.setPassword("");
     }
@@ -49,19 +50,18 @@ public class H2DataSource extends NamedDataSource {
         String username = DEFAULT_USER;
         String password = DEFAULT_PASSWORD;
 
+        DatabaseMode mode = DatabaseMode.MEMORY;
+        StorageType storageType = StorageType.MEMORY;
+
         Driver driver;
         Class<? extends Driver> driverClass = DEFAULT_DRIVER;
 
         String url;
 
-        //privates
-        private DatabaseMode mode = DatabaseMode.FILE;
-        private ServerMode serverMode = ServerMode.FILE;
-
         public Creator(){}
 
         /**
-         * Contructs DataSource from provided connection URL
+         * Constructs DataSource from provided connection URL
          *
          * @param url JDBC URL for H2 (@see http://h2database.com for more info)
          * @return Creator object
@@ -82,6 +82,7 @@ public class H2DataSource extends NamedDataSource {
          */
         public Creator mem(){
             this.mode = DatabaseMode.MEMORY;
+            this.storageType = StorageType.MEMORY;
             return this;
         }
 
@@ -91,6 +92,7 @@ public class H2DataSource extends NamedDataSource {
          */
         public Creator file(){
             this.mode = DatabaseMode.FILE;
+            this.storageType = StorageType.FILE;
             return this;
         }
 
@@ -109,16 +111,6 @@ public class H2DataSource extends NamedDataSource {
          */
         public Creator ssl(){
             this.mode = DatabaseMode.SSL;
-            return this;
-        }
-
-        /**
-         * Defines where is located Database when it runs as server
-         * @param mode
-         * @return
-         */
-        public Creator serverMode(ServerMode mode){
-            this.serverMode = mode;
             return this;
         }
 
@@ -171,6 +163,17 @@ public class H2DataSource extends NamedDataSource {
          */
         public Creator server(String host){
             this.server(host,DEFAULT_PORT);
+            return this;
+        }
+
+        /**
+         * Sets Storage Type (@see StorageType) of Server accessible (TCP or SSL) Database
+         *
+         * @param storageType valid Storage
+         * @return Creator
+         */
+        public Creator storageType(StorageType storageType){
+            this.storageType = storageType;
             return this;
         }
 
@@ -232,16 +235,16 @@ public class H2DataSource extends NamedDataSource {
         public H2DataSource create(){
             //check if we have all required params set
             boolean isURLDefined = (this.url !=null);
-            boolean isDatabaseNameSet = (this.databaseName.equals(DEFAULT_DBNAME));
-            boolean isMemoryMode = (this.mode == DatabaseMode.MEMORY );
-            boolean isServerMemoryMode = (this.serverMode == ServerMode.MEMORY);
-
+            boolean isDatabaseNameSet = (! this.databaseName.equals(DEFAULT_DBNAME));
+            boolean isStoredInMemory = (this.storageType == StorageType.MEMORY);
             if(!isURLDefined){
-                if(isDatabaseNameSet && (! isMemoryMode || ! isServerMemoryMode )){
-                    throw new RuntimeException("You didn't set database name. Noname DB is allowed only for memory mode or Server+Memory mode." +
-                        "Use databaseName() or change mode to Memory by mem(), or server mode serverMode(ServerMode.MEMORY) ");
+                if( ! isDatabaseNameSet && ! isStoredInMemory){
+                    throw new IllegalStateException("You didn't set database name. Noname DB is allowed only for memory mode or Server+Memory mode." +
+                        "Use databaseName() or change mode to Memory by mem(), or storageType(StorageType.MEMORY) for server mode ");
                 }
             }
+            //TODO check params on validity
+
             return new H2DataSource(this);
         }
     }
@@ -263,10 +266,14 @@ public class H2DataSource extends NamedDataSource {
         if(creator.url!=null){
             //we just use it
             URLBuilder.append(creator.url);
+           //do we have options set?
+           if(creator.options.size() > 0){
+                this.addOptions(creator, URLBuilder);
+           }
         } else {
             //ok, we have to build URL step-by-step
-            URLBuilder.append("jbdc:h2:");
-            //futher steps are highly dependent on DB mode
+            URLBuilder.append("jdbc:h2:");
+            //further steps are highly dependent on DB mode
             switch (creator.mode){
                 case MEMORY:
                     URLBuilder.append("mem:");
@@ -290,17 +297,11 @@ public class H2DataSource extends NamedDataSource {
                     return;
             }
             //options
-            if(creator.options.size()!=0){
-                URLBuilder.append(";"); //options delimiter
-                for (String key : creator.options.keySet()) {
-                    String value = creator.options.get(key);
-                    URLBuilder.append(key).append("=").append(value);
-                    URLBuilder.append(";"); //delimiter
-                }
-                //remove traling delimiter
-                URLBuilder.setLength(URLBuilder.length()-1);
+            if(creator.options.size() > 0){
+                 this.addOptions(creator, URLBuilder);
             }
         }
+        this.setUrl(URLBuilder.toString());
     }
 
     private String createMemoryDB(Creator creator){
@@ -336,7 +337,7 @@ public class H2DataSource extends NamedDataSource {
         if(creator.port!=Creator.DEFAULT_PORT){
             builder.append(":").append(creator.port);
         }
-        switch (creator.serverMode){
+        switch (creator.storageType){
             case MEMORY:
                 builder.append(createMemoryDB(creator));
                 break;
@@ -349,4 +350,15 @@ public class H2DataSource extends NamedDataSource {
         return builder.toString();
     }
 
+    private StringBuilder addOptions(Creator creator,StringBuilder URLBuilder){
+        URLBuilder.append(";"); //options delimiter
+        for (String key : creator.options.keySet()) {
+            String value = creator.options.get(key);
+            URLBuilder.append(key).append("=").append(value);
+            URLBuilder.append(";"); //delimiter
+        }
+        //remove trailing delimiter
+        URLBuilder.setLength(URLBuilder.length()-1);
+        return URLBuilder;
+    }
 }
