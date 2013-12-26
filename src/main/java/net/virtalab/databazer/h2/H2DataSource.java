@@ -305,12 +305,19 @@ public class H2DataSource extends NamedDataSource {
     }
 
     private String createMemoryDB(Creator creator){
-        //check if have named or un-named memory DB
-        if(creator.databaseName!=Creator.DEFAULT_DBNAME){
-             return creator.databaseName;
-        } else {
-            return "";
+        StringBuilder builder = new StringBuilder();
+        //adding prefix "mem" (but not for MEMORY mode DB, because it already has it)
+        if(creator.mode != DatabaseMode.MEMORY){
+            //delimiter
+            builder.append("/");
+            String prefix = "mem:";
+            builder.append(prefix);
         }
+        //check if have named or un-named memory DB
+        if(! creator.databaseName.equals(Creator.DEFAULT_DBNAME)){
+             builder.append(creator.databaseName);
+        }
+        return builder.toString();
     }
 
     private String createFileDB(Creator creator){

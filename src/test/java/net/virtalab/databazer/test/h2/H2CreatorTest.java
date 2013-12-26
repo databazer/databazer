@@ -1,6 +1,7 @@
 package net.virtalab.databazer.test.h2;
 
 import net.virtalab.databazer.h2.H2DataSource;
+import net.virtalab.databazer.h2.StorageType;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -38,6 +39,26 @@ public class H2CreatorTest extends Assert {
         assertEquals(exceptedName,actualName);
     }
 
+    @SuppressWarnings("UnnecessaryLocalVariable")
+    @Test
+    public void userAndPasswordTest(){
+        String user = "user";
+        String pass = "passa";
+        H2DataSource ds = new H2DataSource.Creator()
+                .username(user).password(pass)
+                .create();
+
+        String exceptedUserName = user;
+        String actualUserName = ds.getUsername();
+
+        assertEquals("User Name",exceptedUserName,actualUserName);
+
+        String exceptedPassword = pass;
+        String actualPassword = ds.getPassword();
+
+        assertEquals("Password",exceptedPassword,actualPassword);
+    }
+
     @Test
     public void customURLPlusOptions(){
         String customURL = "jdbc:h2:mem:test";
@@ -56,16 +77,20 @@ public class H2CreatorTest extends Assert {
         assertEquals(exceptedURL,actualURL);
     }
 
-    //@Test
+    @Test
     public void namedInMemory(){
         String dbName = "myDB";
         String exceptedURL = "jdbc:h2:mem:myDB";
-        //TODO stub
-        String actualURL = "";
+
+        H2DataSource ds = new H2DataSource.Creator()
+                .mem().databaseName(dbName)
+                .create();
+
+        String actualURL = ds.getUrl();
         assertEquals(exceptedURL,actualURL);
     }
 
-    //@Test
+    @Test
     public void memPlusOptions(){
         String dbName = "memDB";
 
@@ -73,15 +98,19 @@ public class H2CreatorTest extends Assert {
         String key = "IFEXISTS";
         String value = "TRUE";
 
-        String exceptedURL="jdbc:h2:mem:memDB;IFEXISTS=TRUE;";
+        H2DataSource ds = new H2DataSource.Creator()
+                .mem().databaseName(dbName)
+                .option(key,value)
+                .create();
 
-        //TODO stub
-        String actualURL = "";
+        String exceptedURL="jdbc:h2:mem:memDB;IFEXISTS=TRUE";
+
+        String actualURL = ds.getUrl();
         assertEquals(exceptedURL,actualURL);
 
     }
 
-    //@Test
+    @Test
     public void fileDb(){
         String dbName = "myFileDb";
         String pathTo = "/opt";
@@ -90,13 +119,18 @@ public class H2CreatorTest extends Assert {
         String key = "IFEXISTS";
         String value = "TRUE";
 
-        String exceptedURL = "jdbc:h2:file:/opt/myFileDb;IFEXISTS=TRUE;";
-        //TODO stub
-        String actualURL = "";
+        H2DataSource ds = new H2DataSource.Creator()
+                .databaseName(dbName)
+                .file().path(pathTo)
+                .option(key,value)
+                .create();
+
+        String exceptedURL = "jdbc:h2:file:/opt/myFileDb;IFEXISTS=TRUE";
+        String actualURL = ds.getUrl();
         assertEquals(exceptedURL,actualURL);
     }
 
-    //@Test
+    @Test
     public void correctMyPath(){
         String dbName = "myFileDb";
         String pathToDb = "/opt/";
@@ -105,14 +139,19 @@ public class H2CreatorTest extends Assert {
         String key = "IFEXISTS";
         String value = "TRUE";
 
-        String exceptedURL = "jdbc:h2:file:/opt/myFileDb;IFEXISTS=TRUE;";
-        //TODO stub
-        String actualURL = "";
+        H2DataSource ds = new H2DataSource.Creator()
+                .databaseName(dbName)
+                .file().path(pathToDb)
+                .option(key,value)
+                .create();
+
+        String exceptedURL = "jdbc:h2:file:/opt/myFileDb;IFEXISTS=TRUE";
+        String actualURL = ds.getUrl();
         assertEquals(exceptedURL,actualURL);
     }
 
-    //@Test
-    public void tcpServerWithMemoryStore(){
+    @Test
+    public void tcpServerWithCustomPort(){
         String host = "localhost";
         int port = 10000;
 
@@ -122,16 +161,22 @@ public class H2CreatorTest extends Assert {
         String key = "IFEXISTS";
         String value = "TRUE";
 
-        String exceptedURL = "jdbc:h2:tcp://localhost:10000/mem:tcpMem;IFEXISTS=TRUE;";
+        H2DataSource ds = new H2DataSource.Creator()
+                .tcp().server(host,port)
+                .databaseName(dbName)
+                .storageType(StorageType.MEMORY)
+                .option(key,value)
+                .create();
 
-        //TODO stub
-        String actualURL = "";
+        String exceptedURL = "jdbc:h2:tcp://localhost:10000/mem:tcpMem;IFEXISTS=TRUE";
+
+        String actualURL = ds.getUrl();
         assertEquals(exceptedURL,actualURL);
 
     }
 
-    //@Test
-    public void tcpServerWithFileStore(){
+    @Test
+    public void tcpServerWithFileStorage(){
         String host = "localhost";
         String dbName = "tcpFileDb";
         String pathToDb = "/opt";
@@ -140,15 +185,21 @@ public class H2CreatorTest extends Assert {
         String key = "IFEXISTS";
         String value = "TRUE";
 
-        String exceptedURL = "jdbc:h2:tcp://localhost:9092/opt/tcpFileDb;IFEXISTS=TRUE;";
+        H2DataSource ds = new H2DataSource.Creator()
+                .tcp().server(host)
+                .databaseName(dbName)
+                .storageType(StorageType.FILE).path(pathToDb)
+                .option(key,value)
+                .create();
 
-        //TODO stub
-        String actualURL = "";
+        String exceptedURL = "jdbc:h2:tcp://localhost/opt/tcpFileDb;IFEXISTS=TRUE";
+
+        String actualURL = ds.getUrl();
         assertEquals(exceptedURL,actualURL);
 
     }
 
-    //@Test
+    @Test
     public void sslServerWithFileStore(){
         String host = "localhost";
         String dbName = "tcpFileDb";
@@ -158,10 +209,16 @@ public class H2CreatorTest extends Assert {
         String key = "IFEXISTS";
         String value = "TRUE";
 
-        String exceptedURL = "jdbc:h2:ssl://localhost:9092/opt/tcpFileDb;IFEXISTS=TRUE;";
+        H2DataSource ds = new H2DataSource.Creator()
+                .ssl().server(host)
+                .databaseName(dbName)
+                .storageType(StorageType.FILE).path(pathToDb)
+                .option(key,value)
+                .create();
 
-        //TODO stub
-        String actualURL = "";
+
+        String exceptedURL = "jdbc:h2:ssl://localhost/opt/tcpFileDb;IFEXISTS=TRUE";
+        String actualURL = ds.getUrl();
         assertEquals(exceptedURL,actualURL);
     }
 }
