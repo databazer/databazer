@@ -221,4 +221,39 @@ public class H2CreatorTest extends Assert {
         String actualURL = ds.getUrl();
         assertEquals(exceptedURL,actualURL);
     }
+
+    @Test
+    public void DSWithTwoOptions(){
+        String dbName= "testDb";
+
+        String dbCloseKey = "DB_CLOSE_ON_EXIT";
+        String dbCloseValue = "TRUE";
+
+        String modeKey = "MODE";
+        String modeValue = "MYSQL";
+
+        H2DataSource ds = new H2DataSource.Creator()
+                .mem().databaseName(dbName)
+                .option(dbCloseKey,dbCloseValue)
+                .option(modeKey, modeValue)
+                .create();
+
+        String expectedURL = "jdbc:h2:mem:testDb;DB_CLOSE_ON_EXIT=TRUE;MODE=MYSQL";
+        String actualURL = ds.getUrl();
+
+        assertEquals(expectedURL,actualURL);
+    }
+
+    @Test
+    public void anotherDriver(){
+        //using "alternative" (dummy) Driver
+        H2DataSource ds = new H2DataSource.Creator()
+                .driver(com.mysql.jdbc.Driver.class)
+                .create();
+
+        Class expectedDriverClass = com.mysql.jdbc.Driver.class;
+        Class actualDriverClass = ds.getDriver().getClass();
+
+        assertEquals(expectedDriverClass,actualDriverClass);
+    }
 }
