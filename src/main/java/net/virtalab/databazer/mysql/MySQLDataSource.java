@@ -124,7 +124,9 @@ public class MySQLDataSource extends NamedDataSource {
         }
 
         public Creator driver(Driver driver){
-            this.driver =driver;
+            this.driver = driver;
+            //we cannot use both driver and driverClass at same time
+            this.driverClass = null;
             return this;
         }
         public Creator driver(Class<? extends Driver> driver){

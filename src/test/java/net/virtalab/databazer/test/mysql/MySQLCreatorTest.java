@@ -1,8 +1,11 @@
 package net.virtalab.databazer.test.mysql;
 
 import net.virtalab.databazer.mysql.MySQLDataSource;
+import net.virtalab.databazer.test.driver.DummyDriver;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.sql.Driver;
 
 /**
  * Tests for creator
@@ -42,8 +45,32 @@ public class MySQLCreatorTest extends Assert {
     }
 
     @Test
+    public void customDriver(){
+        Driver customDriver = new DummyDriver();
+
+        MySQLDataSource ds = MySQLDataSource.Creator().driver(customDriver).create();
+
+        Class<? extends Driver> expectedDriverClass = DummyDriver.class;
+        Class<? extends Driver> actualDriverClass = ds.getDriver().getClass();
+
+        assertEquals(expectedDriverClass,actualDriverClass);
+    }
+
+    @Test
+    public void customDriverClass(){
+        Class<DummyDriver> customDriverCls = DummyDriver.class;
+
+        MySQLDataSource ds = MySQLDataSource.Creator().driver(customDriverCls).create();
+
+        Class<? extends Driver> expectedDriverClass = DummyDriver.class;
+        Class<? extends Driver> actualDriverClass = ds.getDriver().getClass();
+
+        assertEquals(expectedDriverClass,actualDriverClass);
+    }
+
+    @Test
     public void singleProperty(){
-        MySQLDataSource ds = MySQLDataSource.Creator().option("characterEncoding","UTF-8").create();
+        MySQLDataSource ds = MySQLDataSource.Creator().option("characterEncoding", "UTF-8").create();
 
         String exceptedUrl = "jdbc:mysql://localhost:3306/default?characterEncoding=UTF-8";
         String actualUrl = ds.getUrl();
@@ -54,7 +81,7 @@ public class MySQLCreatorTest extends Assert {
     @Test
     public void multiHosts(){
         MySQLDataSource ds = MySQLDataSource.Creator()
-                .host("localhost").failoverHost("localhost2").failoverHost("localhost3",3307)
+                .host("localhost").failoverHost("localhost2").failoverHost("localhost3", 3307)
                 .databaseName("db")
                 .create();
 
@@ -69,7 +96,7 @@ public class MySQLCreatorTest extends Assert {
         MySQLDataSource ds = MySQLDataSource.Creator()
                 .host("localhost")
                 .databaseName("db")
-                .option("profileSQL","true").option("characterEncoding","UTF-8")
+                .option("profileSQL", "true").option("characterEncoding", "UTF-8")
                 .create();
 
         String exceptedUrl = "jdbc:mysql://localhost:3306/db?profileSQL=true&characterEncoding=UTF-8";

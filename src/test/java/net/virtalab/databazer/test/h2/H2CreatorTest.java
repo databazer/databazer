@@ -2,6 +2,7 @@ package net.virtalab.databazer.test.h2;
 
 import net.virtalab.databazer.h2.H2DataSource;
 import net.virtalab.databazer.h2.StorageType;
+import net.virtalab.databazer.test.driver.DummyDriver;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -243,10 +244,10 @@ public class H2CreatorTest extends Assert {
     public void anotherDriver(){
         //using "alternative" (dummy) Driver
         H2DataSource ds = H2DataSource.Creator()
-                .driver(com.mysql.jdbc.Driver.class)
+                .driver(DummyDriver.class)
                 .create();
 
-        Class expectedDriverClass = com.mysql.jdbc.Driver.class;
+        Class expectedDriverClass = DummyDriver.class;
         Class actualDriverClass = ds.getDriver().getClass();
 
         assertEquals(expectedDriverClass,actualDriverClass);
