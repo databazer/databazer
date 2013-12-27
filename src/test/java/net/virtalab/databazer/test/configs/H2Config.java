@@ -26,7 +26,7 @@ public class H2Config {
     @Bean
     @Qualifier("H2CreatedJavaBean")
     public H2DataSource getCreatedJavaDS(){
-         H2DataSource ds = new H2DataSource.Creator()
+         H2DataSource ds = H2DataSource.Creator()
                  .mem().databaseName("creatorDb")
                  .username("sa")
                  .password("mySuperPass")

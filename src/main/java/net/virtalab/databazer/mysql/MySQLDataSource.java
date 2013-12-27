@@ -24,6 +24,15 @@ public class MySQLDataSource extends NamedDataSource {
         this.setPassword("");
     }
 
+    /**
+     * Provides Creator in static way
+     *
+     * @return Creator instance
+     */
+    public static Creator Creator(){
+        return new Creator();
+    }
+
     public static class Creator{
         //defaults
         private static final String DEFAULT_NAME = "default";

@@ -12,7 +12,7 @@ public class H2CreatorTest extends Assert {
 
     @Test
     public void defaults(){
-        H2DataSource.Creator creator = new H2DataSource.Creator();
+        H2DataSource.Creator creator = H2DataSource.Creator();
         H2DataSource ds = creator.mem().create();
 
         //URL
@@ -32,7 +32,7 @@ public class H2CreatorTest extends Assert {
 
     @Test
     public void namedDataSource(){
-        H2DataSource ds = new H2DataSource.Creator().name("myDS").create();
+        H2DataSource ds = H2DataSource.Creator().name("myDS").create();
 
         String exceptedName = "myDS";
         String actualName = ds.getName();
@@ -67,7 +67,7 @@ public class H2CreatorTest extends Assert {
         String value = "TRUE";
 
         //adjusting DataSource
-        H2DataSource ds = new H2DataSource.Creator()
+        H2DataSource ds = H2DataSource.Creator()
                 .url(customURL)
                 .option(key, value)
                 .create();
@@ -82,7 +82,7 @@ public class H2CreatorTest extends Assert {
         String dbName = "myDB";
         String exceptedURL = "jdbc:h2:mem:myDB";
 
-        H2DataSource ds = new H2DataSource.Creator()
+        H2DataSource ds = H2DataSource.Creator()
                 .mem().databaseName(dbName)
                 .create();
 
@@ -98,7 +98,7 @@ public class H2CreatorTest extends Assert {
         String key = "IFEXISTS";
         String value = "TRUE";
 
-        H2DataSource ds = new H2DataSource.Creator()
+        H2DataSource ds = H2DataSource.Creator()
                 .mem().databaseName(dbName)
                 .option(key,value)
                 .create();
@@ -119,7 +119,7 @@ public class H2CreatorTest extends Assert {
         String key = "IFEXISTS";
         String value = "TRUE";
 
-        H2DataSource ds = new H2DataSource.Creator()
+        H2DataSource ds = H2DataSource.Creator()
                 .databaseName(dbName)
                 .file().path(pathTo)
                 .option(key,value)
@@ -139,7 +139,7 @@ public class H2CreatorTest extends Assert {
         String key = "IFEXISTS";
         String value = "TRUE";
 
-        H2DataSource ds = new H2DataSource.Creator()
+        H2DataSource ds = H2DataSource.Creator()
                 .databaseName(dbName)
                 .file().path(pathToDb)
                 .option(key,value)
@@ -161,7 +161,7 @@ public class H2CreatorTest extends Assert {
         String key = "IFEXISTS";
         String value = "TRUE";
 
-        H2DataSource ds = new H2DataSource.Creator()
+        H2DataSource ds = H2DataSource.Creator()
                 .tcp().server(host,port)
                 .databaseName(dbName)
                 .storageType(StorageType.MEMORY)
@@ -185,7 +185,7 @@ public class H2CreatorTest extends Assert {
         String key = "IFEXISTS";
         String value = "TRUE";
 
-        H2DataSource ds = new H2DataSource.Creator()
+        H2DataSource ds = H2DataSource.Creator()
                 .tcp().server(host)
                 .databaseName(dbName)
                 .storageType(StorageType.FILE).path(pathToDb)
@@ -209,7 +209,7 @@ public class H2CreatorTest extends Assert {
         String key = "IFEXISTS";
         String value = "TRUE";
 
-        H2DataSource ds = new H2DataSource.Creator()
+        H2DataSource ds = H2DataSource.Creator()
                 .ssl().server(host)
                 .databaseName(dbName)
                 .storageType(StorageType.FILE).path(pathToDb)
@@ -232,7 +232,7 @@ public class H2CreatorTest extends Assert {
         String modeKey = "MODE";
         String modeValue = "MYSQL";
 
-        H2DataSource ds = new H2DataSource.Creator()
+        H2DataSource ds = H2DataSource.Creator()
                 .mem().databaseName(dbName)
                 .option(dbCloseKey,dbCloseValue)
                 .option(modeKey, modeValue)
@@ -247,7 +247,7 @@ public class H2CreatorTest extends Assert {
     @Test
     public void anotherDriver(){
         //using "alternative" (dummy) Driver
-        H2DataSource ds = new H2DataSource.Creator()
+        H2DataSource ds = H2DataSource.Creator()
                 .driver(com.mysql.jdbc.Driver.class)
                 .create();
 

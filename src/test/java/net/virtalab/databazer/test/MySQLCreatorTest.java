@@ -11,7 +11,7 @@ public class MySQLCreatorTest extends Assert {
 
     @Test
     public void defaults(){
-        MySQLDataSource ds = new MySQLDataSource.Creator().create();
+        MySQLDataSource ds = MySQLDataSource.Creator().create();
 
         String exceptedUrl = "jdbc:mysql://localhost:3306/default";
         String actualUrl = ds.getUrl();
@@ -20,7 +20,7 @@ public class MySQLCreatorTest extends Assert {
 
     @Test
     public void namedDataSource(){
-        MySQLDataSource ds = new MySQLDataSource.Creator().name("myDS").create();
+        MySQLDataSource ds = MySQLDataSource.Creator().name("myDS").create();
 
         String expectedName = "myDS";
         String actualName = ds.getName();
@@ -31,7 +31,7 @@ public class MySQLCreatorTest extends Assert {
     @Test
     public void customUrl(){
         String url = "jdbc:mysql://127.0.0.2:3306/myDB";
-        MySQLDataSource ds = new MySQLDataSource.Creator().url(url).create();
+        MySQLDataSource ds = MySQLDataSource.Creator().url(url).create();
 
         String exceptedUrl = "jdbc:mysql://127.0.0.2:3306/myDB";
         String actualUrl = ds.getUrl();
@@ -41,7 +41,7 @@ public class MySQLCreatorTest extends Assert {
 
     @Test
     public void singleProperty(){
-        MySQLDataSource ds = new MySQLDataSource.Creator().option("characterEncoding","UTF-8").create();
+        MySQLDataSource ds = MySQLDataSource.Creator().option("characterEncoding","UTF-8").create();
 
         String exceptedUrl = "jdbc:mysql://localhost:3306/default?characterEncoding=UTF-8";
         String actualUrl = ds.getUrl();
@@ -50,7 +50,7 @@ public class MySQLCreatorTest extends Assert {
 
     @Test
     public void multiHosts(){
-        MySQLDataSource ds = new MySQLDataSource.Creator()
+        MySQLDataSource ds = MySQLDataSource.Creator()
                 .host("localhost").failoverHost("localhost2").failoverHost("localhost3",3307)
                 .databaseName("db")
                 .create();
@@ -61,7 +61,7 @@ public class MySQLCreatorTest extends Assert {
 
     @Test
     public void multiProps(){
-        MySQLDataSource ds = new MySQLDataSource.Creator()
+        MySQLDataSource ds = MySQLDataSource.Creator()
                 .host("localhost")
                 .databaseName("db")
                 .option("profileSQL","true").option("characterEncoding","UTF-8")
@@ -74,7 +74,7 @@ public class MySQLCreatorTest extends Assert {
 
     @Test
     public void multiEveryThing(){
-        MySQLDataSource ds = new MySQLDataSource.Creator()
+        MySQLDataSource ds = MySQLDataSource.Creator()
                 .host("localhost").failoverHost("localhost2",3307)
                 .databaseName("db")
                 .option("profileSQL","true").option("characterEncoding","UTF-8")
