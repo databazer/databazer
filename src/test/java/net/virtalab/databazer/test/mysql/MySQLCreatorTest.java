@@ -1,4 +1,4 @@
-package net.virtalab.databazer.test;
+package net.virtalab.databazer.test.mysql;
 
 import net.virtalab.databazer.mysql.MySQLDataSource;
 import org.junit.Assert;
@@ -15,6 +15,7 @@ public class MySQLCreatorTest extends Assert {
 
         String exceptedUrl = "jdbc:mysql://localhost:3306/default";
         String actualUrl = ds.getUrl();
+
         assertEquals(exceptedUrl,actualUrl);
     }
 
@@ -35,6 +36,7 @@ public class MySQLCreatorTest extends Assert {
 
         String exceptedUrl = "jdbc:mysql://127.0.0.2:3306/myDB";
         String actualUrl = ds.getUrl();
+
         assertEquals(exceptedUrl,actualUrl);
 
     }
@@ -45,6 +47,7 @@ public class MySQLCreatorTest extends Assert {
 
         String exceptedUrl = "jdbc:mysql://localhost:3306/default?characterEncoding=UTF-8";
         String actualUrl = ds.getUrl();
+
         assertEquals(exceptedUrl,actualUrl);
     }
 
@@ -54,8 +57,10 @@ public class MySQLCreatorTest extends Assert {
                 .host("localhost").failoverHost("localhost2").failoverHost("localhost3",3307)
                 .databaseName("db")
                 .create();
+
         String exceptedUrl = "jdbc:mysql://localhost:3306,localhost2:3306,localhost3:3307/db";
         String actualUrl = ds.getUrl();
+
         assertEquals(exceptedUrl,actualUrl);
     }
 
@@ -69,6 +74,7 @@ public class MySQLCreatorTest extends Assert {
 
         String exceptedUrl = "jdbc:mysql://localhost:3306/db?profileSQL=true&characterEncoding=UTF-8";
         String actualUrl = ds.getUrl();
+
         assertEquals(exceptedUrl, actualUrl);
     }
 
@@ -81,6 +87,7 @@ public class MySQLCreatorTest extends Assert {
                 .create();
         String exceptedUrl = "jdbc:mysql://localhost:3306,localhost2:3307/db?profileSQL=true&characterEncoding=UTF-8";
         String actualUrl = ds.getUrl();
+
         assertEquals(exceptedUrl, actualUrl);
     }
 }

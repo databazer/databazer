@@ -1,7 +1,6 @@
-package net.virtalab.databazer.test;
+package net.virtalab.databazer.test.mysql;
 
 import net.virtalab.databazer.mysql.MySQLDataSource;
-import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +18,7 @@ import java.sql.Driver;
 @ContextConfiguration(locations = "classpath:**/test-context.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class MySQLDataSourceTest extends Assert {
-    private static final Logger log = Logger.getLogger(MySQLDataSourceTest.class);
+    //private static final Logger log = Logger.getLogger(MySQLDataSourceTest.class);
 
     @Autowired
     @Qualifier("mysqlXML")

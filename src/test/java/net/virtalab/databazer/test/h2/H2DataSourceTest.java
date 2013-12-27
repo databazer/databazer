@@ -23,14 +23,6 @@ public class H2DataSourceTest extends Assert {
     @Qualifier("h2XML")
     private H2DataSource h2DataSource;
 
-    @Autowired
-    @Qualifier("H2JavaBean")
-    private H2DataSource javaBeanDefaultConstructed;
-
-    @Autowired
-    @Qualifier("H2CreatedJavaBean")
-    private H2DataSource javaBeanCreatorConstructed;
-
     /**
      *  Default constructor which is called by Spring set some default values.
      *  This test intention is to check if we can use those default together and modify some props in same XML bean definition
@@ -54,6 +46,10 @@ public class H2DataSourceTest extends Assert {
         assertEquals(expectedPassword,actualPassword);
     }
 
+    @Autowired
+    @Qualifier("H2JavaBean")
+    private H2DataSource javaBeanDefaultConstructed;
+
     @Test
     public void javaBeanDefaultConstructor(){
         if(javaBeanDefaultConstructed==null){
@@ -72,6 +68,10 @@ public class H2DataSourceTest extends Assert {
 
         assertEquals(defaultURL,URLInDS);
     }
+
+    @Autowired
+    @Qualifier("H2CreatedJavaBean")
+    private H2DataSource javaBeanCreatorConstructed;
 
     @Test
     public void javaBeanCreatorConstructed(){

@@ -15,16 +15,14 @@ public class H2CreatorTest extends Assert {
         H2DataSource.Creator creator = H2DataSource.Creator();
         H2DataSource ds = creator.mem().create();
 
-        //URL
         String expectedURL = "jdbc:h2:mem:";
         String actualURL = ds.getUrl();
         assertEquals("URL ain't match",expectedURL,actualURL);
 
-        //User
         String expectedUser = "sa";
         String actualUser = ds.getUsername();
         assertEquals("User ain't match",expectedUser,actualUser);
-        //Password
+
         String expectedPassword = "";
         String actualPassword = ds.getPassword();
         assertEquals("Password ain't match",expectedPassword,actualPassword);
@@ -36,6 +34,7 @@ public class H2CreatorTest extends Assert {
 
         String exceptedName = "myDS";
         String actualName = ds.getName();
+
         assertEquals(exceptedName,actualName);
     }
 
@@ -44,49 +43,49 @@ public class H2CreatorTest extends Assert {
     public void userAndPasswordTest(){
         String user = "user";
         String pass = "passa";
+
         H2DataSource ds = new H2DataSource.Creator()
                 .username(user).password(pass)
                 .create();
 
         String exceptedUserName = user;
         String actualUserName = ds.getUsername();
-
         assertEquals("User Name",exceptedUserName,actualUserName);
 
         String exceptedPassword = pass;
         String actualPassword = ds.getPassword();
-
         assertEquals("Password",exceptedPassword,actualPassword);
     }
 
     @Test
     public void customURLPlusOptions(){
         String customURL = "jdbc:h2:mem:test";
-        //option
+
         String key = "IFEXISTS";
         String value = "TRUE";
 
-        //adjusting DataSource
         H2DataSource ds = H2DataSource.Creator()
                 .url(customURL)
                 .option(key, value)
                 .create();
-        //expected
+
         String exceptedURL = customURL+";IFEXISTS=TRUE";
         String actualURL = ds.getUrl();
+
         assertEquals(exceptedURL,actualURL);
     }
 
     @Test
     public void namedInMemory(){
         String dbName = "myDB";
-        String exceptedURL = "jdbc:h2:mem:myDB";
 
         H2DataSource ds = H2DataSource.Creator()
                 .mem().databaseName(dbName)
                 .create();
 
+        String exceptedURL = "jdbc:h2:mem:myDB";
         String actualURL = ds.getUrl();
+
         assertEquals(exceptedURL,actualURL);
     }
 
@@ -94,7 +93,6 @@ public class H2CreatorTest extends Assert {
     public void memPlusOptions(){
         String dbName = "memDB";
 
-        //option
         String key = "IFEXISTS";
         String value = "TRUE";
 
@@ -104,8 +102,8 @@ public class H2CreatorTest extends Assert {
                 .create();
 
         String exceptedURL="jdbc:h2:mem:memDB;IFEXISTS=TRUE";
-
         String actualURL = ds.getUrl();
+
         assertEquals(exceptedURL,actualURL);
 
     }
@@ -115,7 +113,6 @@ public class H2CreatorTest extends Assert {
         String dbName = "myFileDb";
         String pathTo = "/opt";
 
-        //option
         String key = "IFEXISTS";
         String value = "TRUE";
 
@@ -127,6 +124,7 @@ public class H2CreatorTest extends Assert {
 
         String exceptedURL = "jdbc:h2:file:/opt/myFileDb;IFEXISTS=TRUE";
         String actualURL = ds.getUrl();
+
         assertEquals(exceptedURL,actualURL);
     }
 
@@ -135,7 +133,6 @@ public class H2CreatorTest extends Assert {
         String dbName = "myFileDb";
         String pathToDb = "/opt/";
 
-        //option
         String key = "IFEXISTS";
         String value = "TRUE";
 
@@ -147,6 +144,7 @@ public class H2CreatorTest extends Assert {
 
         String exceptedURL = "jdbc:h2:file:/opt/myFileDb;IFEXISTS=TRUE";
         String actualURL = ds.getUrl();
+
         assertEquals(exceptedURL,actualURL);
     }
 
@@ -154,10 +152,8 @@ public class H2CreatorTest extends Assert {
     public void tcpServerWithCustomPort(){
         String host = "localhost";
         int port = 10000;
-
         String dbName = "tcpMem";
 
-        //option
         String key = "IFEXISTS";
         String value = "TRUE";
 
@@ -169,8 +165,8 @@ public class H2CreatorTest extends Assert {
                 .create();
 
         String exceptedURL = "jdbc:h2:tcp://localhost:10000/mem:tcpMem;IFEXISTS=TRUE";
-
         String actualURL = ds.getUrl();
+
         assertEquals(exceptedURL,actualURL);
 
     }
@@ -181,7 +177,6 @@ public class H2CreatorTest extends Assert {
         String dbName = "tcpFileDb";
         String pathToDb = "/opt";
 
-        //option
         String key = "IFEXISTS";
         String value = "TRUE";
 
@@ -193,8 +188,8 @@ public class H2CreatorTest extends Assert {
                 .create();
 
         String exceptedURL = "jdbc:h2:tcp://localhost/opt/tcpFileDb;IFEXISTS=TRUE";
-
         String actualURL = ds.getUrl();
+
         assertEquals(exceptedURL,actualURL);
 
     }
@@ -205,7 +200,6 @@ public class H2CreatorTest extends Assert {
         String dbName = "tcpFileDb";
         String pathToDb = "/opt";
 
-        //option
         String key = "IFEXISTS";
         String value = "TRUE";
 
@@ -219,6 +213,7 @@ public class H2CreatorTest extends Assert {
 
         String exceptedURL = "jdbc:h2:ssl://localhost/opt/tcpFileDb;IFEXISTS=TRUE";
         String actualURL = ds.getUrl();
+
         assertEquals(exceptedURL,actualURL);
     }
 
