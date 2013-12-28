@@ -117,4 +117,42 @@ public class MySQLCreatorTest extends Assert {
 
         assertEquals(exceptedUrl, actualUrl);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void wrongName(){
+        MySQLDataSource.Creator().name("").create();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void wrongDbName(){
+        MySQLDataSource.Creator().databaseName("").create();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void wrongHostname(){
+        MySQLDataSource.Creator().databaseName("db").host("").create();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void wrongPort(){
+        MySQLDataSource.Creator().host("localhost").port(80000).create();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void wrongFailoverHost(){
+        MySQLDataSource.Creator()
+                .host("localhost").failoverHost("",3307)
+                .databaseName("db")
+                .create();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void wrongFailoverPort(){
+        MySQLDataSource.Creator()
+                .host("localhost").failoverHost("localhost",83307)
+                .databaseName("db")
+                .create();
+    }
+
+
 }

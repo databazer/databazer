@@ -162,6 +162,10 @@ public class H2DataSource extends NamedDataSource {
         public Creator server(String host, int port){
             this.host = host;
             this.port = port;
+            //if server used - user need TCP or SSL
+            if(this.mode!=DatabaseMode.SSL){
+                this.mode = DatabaseMode.TCP;
+            }
             return this;
         }
 
@@ -252,7 +256,21 @@ public class H2DataSource extends NamedDataSource {
                         "Use databaseName() or change mode to Memory by mem(), or storageType(StorageType.MEMORY) for server mode ");
                 }
             }
-            //TODO check params on validity
+
+            if(this.name.length()==0){
+                throw new IllegalArgumentException("Empty name is not allowed");
+            }
+
+            if(this.host.length()==0){
+                throw new IllegalArgumentException("Empty hostname is not allowed");
+            }
+
+            int MIN_PORT=1;
+            int MAX_PORT=65535;
+
+            if(port < MIN_PORT || port > MAX_PORT){
+                throw new IllegalArgumentException("Port cannot be less then "+MIN_PORT+" and more then "+MAX_PORT);
+            }
 
             return new H2DataSource(this);
         }

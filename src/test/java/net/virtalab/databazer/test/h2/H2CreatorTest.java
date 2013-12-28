@@ -252,4 +252,35 @@ public class H2CreatorTest extends Assert {
 
         assertEquals(expectedDriverClass,actualDriverClass);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void wrongName(){
+       H2DataSource.Creator().name("").create();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void wrongHost(){
+        H2DataSource.Creator().tcp().server("").mem().create();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void wrongPort(){
+        H2DataSource.Creator().server("localhost",80000).mem().create();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void noDbNameAtFileMode(){
+        H2DataSource.Creator().file().create();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void emptyDbNameAtFileMode(){
+        H2DataSource.Creator().file().databaseName("").create();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void serverModeWithoutDatabaseName(){
+        H2DataSource.Creator().server("localhost").storageType(StorageType.FILE).create();
+    }
+
 }

@@ -139,7 +139,35 @@ public class MySQLDataSource extends NamedDataSource {
         }
 
         public MySQLDataSource create(){
-           return new MySQLDataSource(this);
+            if(this.name.length()==0){
+                throw new IllegalArgumentException("Empty name is not allowed");
+            }
+            if(this.databaseName.length()==0){
+                throw new IllegalArgumentException("Empty database name is not allowed");
+            }
+
+            int MIN_PORT=1;
+            int MAX_PORT=65535;
+
+            if(this.hosts.size()>0){
+                for(String host: this.hosts.keySet()){
+                    if(host.length()==0){
+                        throw new IllegalArgumentException("Empty hostname is not allowed");
+                    }
+                    int port = this.hosts.get(host);
+                    if(port < MIN_PORT || port > MAX_PORT){
+                        throw new IllegalArgumentException("Port cannot be less then "+MIN_PORT+" and more then "+MAX_PORT);
+                    }
+                }
+            } else {
+                if(this.host.length()==0){
+                    throw new IllegalArgumentException("Empty hostname is not allowed");
+                }
+                if(this.port < MIN_PORT || this.port > MAX_PORT){
+                    throw new IllegalArgumentException("Port cannot be less then "+MIN_PORT+" and more then "+MAX_PORT);
+                }
+            }
+            return new MySQLDataSource(this);
         }
     }
 
