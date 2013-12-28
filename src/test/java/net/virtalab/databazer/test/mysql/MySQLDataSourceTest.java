@@ -44,7 +44,52 @@ public class MySQLDataSourceTest extends Assert {
         String realUser = mySQLDataSource.getUsername();
 
         assertEquals(expectedUser,realUser);
+    }
+
+    @Autowired
+    @Qualifier("MySQLBean")
+    private MySQLDataSource mySQLJavaDS;
+
+    @Test
+    public void javaConfiguredDataSource(){
+        if(mySQLJavaDS==null){
+            assertTrue("Running test failed. Cannot autowire bean.",false);
+        }
+
+        String expectedName = "myDs";
+        String actualName = mySQLJavaDS.getName();
+        assertEquals("Name doesn't meet test expectations",expectedName,actualName);
+
+        String expectedUser = "user";
+        String actualUser = mySQLJavaDS.getUsername();
+        assertEquals("Username doesn't meet test expectations",expectedUser,actualUser);
+
+        String expectedPassword = "superPass";
+        String actualPassword = mySQLJavaDS.getPassword();
+        assertEquals("Password doesn't meet test expectations",expectedPassword,actualPassword);
 
     }
 
+    @Autowired
+    @Qualifier("MySQLCreatedBean")
+    private MySQLDataSource mySQLCreatedJavaDS;
+
+    public void javaConfiguredDSWithCreator(){
+        if(mySQLCreatedJavaDS==null){
+            assertTrue("Running test failed. Cannot autowire bean.",false);
+        }
+
+        String exceptedUrl = "jdbc:mysql://localhost:3306/myDB";
+        String actualUrl = mySQLCreatedJavaDS.getUrl();
+        assertEquals("URL doesn't meet test expectations",exceptedUrl,actualUrl);
+
+        String expectedUser = "user";
+        String actualUser = mySQLCreatedJavaDS.getUsername();
+        assertEquals("Username doesn't meet test expectations",expectedUser,actualUser);
+
+        String expectedPassword = "mySuperPass";
+        String actualPassword = mySQLCreatedJavaDS.getPassword();
+        assertEquals("Password doesn't meet test expectations",expectedPassword,actualPassword);
+
+    }
 }
