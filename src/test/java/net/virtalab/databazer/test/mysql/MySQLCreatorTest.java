@@ -6,6 +6,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.sql.Driver;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Tests for creator
@@ -20,6 +22,25 @@ public class MySQLCreatorTest extends Assert {
         String actualUrl = ds.getUrl();
 
         assertEquals(exceptedUrl,actualUrl);
+    }
+
+    @SuppressWarnings("UnnecessaryLocalVariable")
+    @Test
+    public void modifiedCredentials(){
+        String username = "mylogin";
+        String password = "mypass";
+
+        MySQLDataSource ds = MySQLDataSource.Creator()
+                .username(username).password(password)
+                .create();
+
+        String expectedUsername = username;
+        String actualUsername = ds.getUsername();
+        assertEquals("Username doesn't meet expectations",expectedUsername,actualUsername);
+
+        String expectedPassword = password;
+        String actualPassword = ds.getPassword();
+        assertEquals("Password doesn't meet expectations",expectedPassword,actualPassword);
     }
 
     @Test
@@ -41,7 +62,17 @@ public class MySQLCreatorTest extends Assert {
         String actualUrl = ds.getUrl();
 
         assertEquals(exceptedUrl,actualUrl);
+    }
 
+    @Test
+    public void CreatorFromCustomURL(){
+        String url = "jdbc:mysql://127.0.0.2:3306/myDB";
+        MySQLDataSource ds = MySQLDataSource.Creator(url).create();
+
+        String exceptedUrl = "jdbc:mysql://127.0.0.2:3306/myDB";
+        String actualUrl = ds.getUrl();
+
+        assertEquals(exceptedUrl,actualUrl);
     }
 
     @Test
@@ -97,6 +128,25 @@ public class MySQLCreatorTest extends Assert {
                 .host("localhost")
                 .databaseName("db")
                 .option("profileSQL", "true").option("characterEncoding", "UTF-8")
+                .create();
+
+        String exceptedUrl = "jdbc:mysql://localhost:3306/db?profileSQL=true&characterEncoding=UTF-8";
+        String actualUrl = ds.getUrl();
+
+        assertEquals(exceptedUrl, actualUrl);
+    }
+
+    @Test
+    public void multiPropsAsMap(){
+        Map<String,String> options = new HashMap<String,String>();
+
+        options.put("profileSQL","true");
+        options.put("characterEncoding", "UTF-8");
+
+        MySQLDataSource ds = MySQLDataSource.Creator()
+                .host("localhost")
+                .databaseName("db")
+                .options(options)
                 .create();
 
         String exceptedUrl = "jdbc:mysql://localhost:3306/db?profileSQL=true&characterEncoding=UTF-8";

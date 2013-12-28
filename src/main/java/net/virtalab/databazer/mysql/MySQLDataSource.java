@@ -33,6 +33,16 @@ public class MySQLDataSource extends NamedDataSource {
         return new Creator();
     }
 
+    /**
+     * Provides Creator(url) in static way
+     *
+     * @param url custom JDBC URL for MySQL
+     * @return Creator instance
+     */
+    public static Creator Creator(String url){
+        return new Creator(url);
+    }
+
     public static class Creator{
         //defaults
         private static final String DEFAULT_NAME = "default";

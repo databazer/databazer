@@ -228,6 +228,9 @@ public class H2DataSource extends NamedDataSource {
          */
         public Creator driver(Driver driver){
             this.driver = driver;
+            //null driverClass as we cannot use both at same time
+            this.driverClass = null;
+
             return this;
         }
 

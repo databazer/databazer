@@ -241,10 +241,23 @@ public class H2CreatorTest extends Assert {
     }
 
     @Test
-    public void anotherDriver(){
+    public void anotherDriverClass(){
         //using "alternative" (dummy) Driver
         H2DataSource ds = H2DataSource.Creator()
                 .driver(DummyDriver.class)
+                .create();
+
+        Class expectedDriverClass = DummyDriver.class;
+        Class actualDriverClass = ds.getDriver().getClass();
+
+        assertEquals(expectedDriverClass,actualDriverClass);
+    }
+
+    @Test
+    public void anotherDriver(){
+        DummyDriver dummyDriver = new DummyDriver();
+        H2DataSource ds = H2DataSource.Creator()
+                .driver(dummyDriver)
                 .create();
 
         Class expectedDriverClass = DummyDriver.class;
@@ -265,7 +278,7 @@ public class H2CreatorTest extends Assert {
 
     @Test(expected = IllegalArgumentException.class)
     public void wrongPort(){
-        H2DataSource.Creator().server("localhost",80000).mem().create();
+        H2DataSource.Creator().server("localhost", 80000).mem().create();
     }
 
     @Test(expected = IllegalStateException.class)
