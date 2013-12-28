@@ -208,13 +208,21 @@ public class MySQLDataSource extends NamedDataSource {
                 //multiple hosts
                 for(String host: creator.hosts.keySet()){
                     int port = creator.hosts.get(host);
-                    sb.append(host).append(":").append(port);
+                    sb.append(host);
+
+                    if(port != Creator.DEFAULT_PORT ){
+                        sb.append(":").append(port);
+                    }
+
                     sb.append(","); //host delimiter
                 }
                 sb.setLength(sb.length()-1);
             } else{
                 //single host
-                sb.append(creator.host).append(":").append(creator.port);
+                sb.append(creator.host);
+                if(creator.port != Creator.DEFAULT_PORT){
+                    sb.append(":").append(creator.port);
+                }
             }
 
             //database name

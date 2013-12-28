@@ -79,7 +79,7 @@ public class MySQLDataSourceTest extends Assert {
             assertTrue("Running test failed. Cannot autowire bean.",false);
         }
 
-        String exceptedUrl = "jdbc:mysql://localhost:3306/myDB";
+        String exceptedUrl = "jdbc:mysql://localhost/myDB";
         String actualUrl = mySQLCreatedJavaDS.getUrl();
         assertEquals("URL doesn't meet test expectations",exceptedUrl,actualUrl);
 

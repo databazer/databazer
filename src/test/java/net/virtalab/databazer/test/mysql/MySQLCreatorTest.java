@@ -18,7 +18,7 @@ public class MySQLCreatorTest extends Assert {
     public void defaults(){
         MySQLDataSource ds = MySQLDataSource.Creator().create();
 
-        String exceptedUrl = "jdbc:mysql://localhost:3306/default";
+        String exceptedUrl = "jdbc:mysql://localhost/default";
         String actualUrl = ds.getUrl();
 
         assertEquals(exceptedUrl,actualUrl);
@@ -55,10 +55,10 @@ public class MySQLCreatorTest extends Assert {
 
     @Test
     public void customUrl(){
-        String url = "jdbc:mysql://127.0.0.2:3306/myDB";
+        String url = "jdbc:mysql://127.0.0.1/myDB";
         MySQLDataSource ds = MySQLDataSource.Creator().url(url).create();
 
-        String exceptedUrl = "jdbc:mysql://127.0.0.2:3306/myDB";
+        String exceptedUrl = "jdbc:mysql://127.0.0.1/myDB";
         String actualUrl = ds.getUrl();
 
         assertEquals(exceptedUrl,actualUrl);
@@ -66,10 +66,10 @@ public class MySQLCreatorTest extends Assert {
 
     @Test
     public void CreatorFromCustomURL(){
-        String url = "jdbc:mysql://127.0.0.2:3306/myDB";
+        String url = "jdbc:mysql://127.0.0.2:3307/myDB";
         MySQLDataSource ds = MySQLDataSource.Creator(url).create();
 
-        String exceptedUrl = "jdbc:mysql://127.0.0.2:3306/myDB";
+        String exceptedUrl = "jdbc:mysql://127.0.0.2:3307/myDB";
         String actualUrl = ds.getUrl();
 
         assertEquals(exceptedUrl,actualUrl);
@@ -103,7 +103,7 @@ public class MySQLCreatorTest extends Assert {
     public void singleProperty(){
         MySQLDataSource ds = MySQLDataSource.Creator().option("characterEncoding", "UTF-8").create();
 
-        String exceptedUrl = "jdbc:mysql://localhost:3306/default?characterEncoding=UTF-8";
+        String exceptedUrl = "jdbc:mysql://localhost/default?characterEncoding=UTF-8";
         String actualUrl = ds.getUrl();
 
         assertEquals(exceptedUrl,actualUrl);
@@ -116,7 +116,7 @@ public class MySQLCreatorTest extends Assert {
                 .databaseName("db")
                 .create();
 
-        String exceptedUrl = "jdbc:mysql://localhost:3306,localhost2:3306,localhost3:3307/db";
+        String exceptedUrl = "jdbc:mysql://localhost,localhost2,localhost3:3307/db";
         String actualUrl = ds.getUrl();
 
         assertEquals(exceptedUrl,actualUrl);
@@ -130,7 +130,7 @@ public class MySQLCreatorTest extends Assert {
                 .option("profileSQL", "true").option("characterEncoding", "UTF-8")
                 .create();
 
-        String exceptedUrl = "jdbc:mysql://localhost:3306/db?profileSQL=true&characterEncoding=UTF-8";
+        String exceptedUrl = "jdbc:mysql://localhost/db?profileSQL=true&characterEncoding=UTF-8";
         String actualUrl = ds.getUrl();
 
         assertEquals(exceptedUrl, actualUrl);
@@ -149,7 +149,7 @@ public class MySQLCreatorTest extends Assert {
                 .options(options)
                 .create();
 
-        String exceptedUrl = "jdbc:mysql://localhost:3306/db?profileSQL=true&characterEncoding=UTF-8";
+        String exceptedUrl = "jdbc:mysql://localhost/db?profileSQL=true&characterEncoding=UTF-8";
         String actualUrl = ds.getUrl();
 
         assertEquals(exceptedUrl, actualUrl);
@@ -162,7 +162,7 @@ public class MySQLCreatorTest extends Assert {
                 .databaseName("db")
                 .option("profileSQL","true").option("characterEncoding","UTF-8")
                 .create();
-        String exceptedUrl = "jdbc:mysql://localhost:3306,localhost2:3307/db?profileSQL=true&characterEncoding=UTF-8";
+        String exceptedUrl = "jdbc:mysql://localhost,localhost2:3307/db?profileSQL=true&characterEncoding=UTF-8";
         String actualUrl = ds.getUrl();
 
         assertEquals(exceptedUrl, actualUrl);
