@@ -1,4 +1,4 @@
 databazer
 =========
 
-Library for creating DataSources for populare SQL Databases 
+Library for creating DataSources for popular SQL Databases
