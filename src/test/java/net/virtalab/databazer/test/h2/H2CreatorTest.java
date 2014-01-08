@@ -304,4 +304,13 @@ public class H2CreatorTest extends Assert {
                 .create();
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void inMemoryDBWithFileStorage(){
+        H2DataSource.Creator().mem().storageType(StorageType.FILE).create();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void fileDBWithMemoryStorage(){
+        H2DataSource.Creator().file().storageType(StorageType.MEMORY).create();
+    }
 }

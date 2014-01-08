@@ -384,9 +384,13 @@ public class H2DataSource extends NamedDataSource {
          * @return generated {@link H2DataSource}
          * @throws java.lang.IllegalArgumentException when argument value out of valid scope
          * @throws java.lang.IllegalStateException when DB with settings provided settings cannot be created.
+         * <p>
          * For example:
          * <ul>
+         * <li>At least one of compulsory fields is NULL</li>
          * <li>Empty database name for {@link StorageType#FILE File storage mode}</li>
+         * <li>Empty datasource name</li>
+         * <li>When setting {@link StorageType#FILE File storage mode} for {@link DatabaseMode#MEMORY in-memory Database} and vice-versa</li>
          * </ul>
          */
         public H2DataSource create(){
@@ -404,27 +408,46 @@ public class H2DataSource extends NamedDataSource {
             //check if we have all required params set
             boolean isURLDefined = (this.url !=null);
             boolean isDatabaseNameSet = (! this.databaseName.equals(DEFAULT_DBNAME));
+            //mode
+            boolean isInMemoryDb = (this.mode == DatabaseMode.MEMORY);
+            boolean isFileDb = (this.mode == DatabaseMode.FILE);
+            //storage mode
             boolean isStoredInMemory = (this.storageType == StorageType.MEMORY);
+            boolean isStoredAtFile = (this.storageType == StorageType.FILE);
+
             if(!isURLDefined){
+                //we have to create URL, so let's run some URL-related pre-checks
+
+                //Database name section
                 if( ! isDatabaseNameSet && ! isStoredInMemory){
                     throw new IllegalStateException("You didn't set database name. Noname DB is allowed only for memory mode or Server+Memory mode." +
                         "Use databaseName() or change mode to Memory by mem(), or storageType(StorageType.MEMORY) for server mode ");
+                }
+
+                //Host section
+                if(this.host.length()==0){
+                    throw new IllegalArgumentException("Empty hostname is not allowed");
+                }
+
+                //Port section
+                int MIN_PORT=1;
+                int MAX_PORT=65535;
+
+                if(port < MIN_PORT || port > MAX_PORT){
+                    throw new IllegalArgumentException("Port cannot be less then "+MIN_PORT+" and more then "+MAX_PORT);
+                }
+
+                // Mode/Storage match
+                if(isInMemoryDb && isStoredAtFile){
+                    throw new IllegalStateException("It seems like you set in-memory database together with FILE Storage type. MEMORY is only valid Storage type for in-memory database");
+                }
+                if(isFileDb && isStoredInMemory){
+                    throw new IllegalStateException("It seems like you set file database together with Memory storage type. FILE is only valid Storage type for file database");
                 }
             }
 
             if(this.name.length()==0){
                 throw new IllegalArgumentException("Empty name is not allowed");
-            }
-
-            if(this.host.length()==0){
-                throw new IllegalArgumentException("Empty hostname is not allowed");
-            }
-
-            int MIN_PORT=1;
-            int MAX_PORT=65535;
-
-            if(port < MIN_PORT || port > MAX_PORT){
-                throw new IllegalArgumentException("Port cannot be less then "+MIN_PORT+" and more then "+MAX_PORT);
             }
 
             return new H2DataSource(this);
