@@ -204,5 +204,12 @@ public class MySQLCreatorTest extends Assert {
                 .create();
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void nullHost(){
+        MySQLDataSource.Creator()
+                .host(null)
+                .databaseName("db")
+                .create();
+    }
 
 }
