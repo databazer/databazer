@@ -296,4 +296,12 @@ public class H2CreatorTest extends Assert {
         H2DataSource.Creator().server("localhost").storageType(StorageType.FILE).create();
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void nullServer(){
+        H2DataSource.Creator()
+                .server(null)
+                .databaseName("db")
+                .create();
+    }
+
 }

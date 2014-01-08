@@ -2,10 +2,9 @@ package net.virtalab.databazer.mysql;
 
 import net.virtalab.databazer.NamedDataSource;
 
+import java.lang.reflect.Field;
 import java.sql.Driver;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The MySQLDataSource represents implementation of DataSource interface {@link javax.sql.DataSource} for MySQL Databases
@@ -337,6 +336,17 @@ public class MySQLDataSource extends NamedDataSource {
          * </ul>
          */
         public MySQLDataSource create(){
+            //noinspection CaughtExceptionImmediatelyRethrown
+            try{
+                List<String> optionalFields = new ArrayList<String>();
+                optionalFields.add("driver");
+                optionalFields.add("driverClass");
+                optionalFields.add("url");
+
+                nullValidator(this,optionalFields);
+            }catch (IllegalArgumentException e){
+                throw e;
+            }
             if(this.name.length()==0){
                 throw new IllegalArgumentException("Empty name is not allowed");
             }
@@ -366,6 +376,34 @@ public class MySQLDataSource extends NamedDataSource {
                 }
             }
             return new MySQLDataSource(this);
+        }
+
+        /**
+         * Validates if creator instance has null values at fields
+         *
+         * @param creator Creator instance
+         * @param excludedFields field names that can be empty
+         * @throws java.lang.IllegalArgumentException when catches null-values field
+         */
+        private void nullValidator(Creator creator,List<String> excludedFields) throws IllegalArgumentException {
+            Class<?> c = creator.getClass();
+            Field[] fields = c.getDeclaredFields();
+            for(Field f: fields){
+                String name;
+                Object value;
+                try {
+                    name = f.getName();
+                    value = f.get(creator);
+                } catch (IllegalAccessException e) {
+                    continue;
+                }
+
+                boolean nameExcluded = excludedFields.contains(name);
+                if(value==null && !nameExcluded){
+                    String message = f.getName()+" cannot be NULL";
+                    throw new IllegalArgumentException(message);
+                }
+            }
         }
     }
 

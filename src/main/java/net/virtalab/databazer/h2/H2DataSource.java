@@ -2,8 +2,11 @@ package net.virtalab.databazer.h2;
 
 import net.virtalab.databazer.NamedDataSource;
 
+import java.lang.reflect.Field;
 import java.sql.Driver;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -387,6 +390,17 @@ public class H2DataSource extends NamedDataSource {
          * </ul>
          */
         public H2DataSource create(){
+            //noinspection CaughtExceptionImmediatelyRethrown
+            try{
+                List<String> optionalFields = new ArrayList<String>();
+                optionalFields.add("driver");
+                optionalFields.add("driverClass");
+                optionalFields.add("url");
+                nullValidator(this,optionalFields);
+            }catch (IllegalArgumentException e){
+                throw e;
+            }
+
             //check if we have all required params set
             boolean isURLDefined = (this.url !=null);
             boolean isDatabaseNameSet = (! this.databaseName.equals(DEFAULT_DBNAME));
@@ -414,6 +428,33 @@ public class H2DataSource extends NamedDataSource {
             }
 
             return new H2DataSource(this);
+        }
+        /**
+         * Validates if creator instance has null values at fields
+         *
+         * @param creator Creator instance
+         * @param excludedFields field names that can be empty
+         * @throws java.lang.IllegalArgumentException when catches null-values field
+         */
+        private void nullValidator(Creator creator,List<String> excludedFields) throws IllegalArgumentException {
+            Class<?> c = creator.getClass();
+            Field[] fields = c.getDeclaredFields();
+            for(Field f: fields){
+                String name;
+                Object value;
+                try {
+                    name = f.getName();
+                    value = f.get(creator);
+                } catch (IllegalAccessException e) {
+                    continue;
+                }
+
+                boolean nameExcluded = excludedFields.contains(name);
+                if(value==null && !nameExcluded){
+                    String message = f.getName()+" cannot be NULL. Do not override default values even if you don't use it";
+                    throw new IllegalArgumentException(message);
+                }
+            }
         }
     }
 
