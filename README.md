@@ -7,7 +7,7 @@ Databazer is Java library for creating DataSources for popular SQL Databases
 
 Currently we implemented DataSources for MySQL and H2 Databases only.
 
-###Why those databases only?
+####Why those databases only?
 
 Just because primary we use those two DBs in our projects.
 If databazer will be in demand we will provide support for needed Databases. So don't hesitate to raise feature request.
@@ -33,7 +33,7 @@ Here is our tracker for this project:
 First clone repo from Github: 
 `git clone git@github.com:virtalab/databazer.git databazer`
 
-Move to databazer directory
+Go to databazer directory
 `cd databazer`
 
 Run 
