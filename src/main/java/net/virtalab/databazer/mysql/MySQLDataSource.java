@@ -36,13 +36,13 @@ import java.util.*;
  * <ol>
  *     <li>
  *         Creating new instance of Creator:
- *     <p><pre>
+ *     <pre>
  *       MySQLDataSource.Creator creator = new MySQLDataSource.Creator();
  *     </pre>
  *     </li>
  *     <li>
  *         Static methods {@link #Creator()} and {@link #Creator(String) }
- *     <p><pre>
+ *     <pre>
  *       MySQLDataSource.Creator = MySQLDataSource.Creator();
  *     </pre>
  *     </li>

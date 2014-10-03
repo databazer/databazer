@@ -262,7 +262,7 @@ public class H2DataSource extends NamedDataSource {
          * <P>
          * Path could be relative to running directory. (Example ../db. Interpreted as: goto one level above running directory and goto db there)
          * <P>
-         * Path could be relative to user home (*nix only) (Example: ~/db. Interpreted as: /home/<user_who_running_java_program>/db)
+         * Path could be relative to user home (*nix only) (Example: ~/db. Interpreted as: /home/_user_who_running_java_program_/db)
          * <P>
          * Path could be absolute to / (*nix only) (Example: /opt/db. Interpreted as: /opt/db)
          * <P>

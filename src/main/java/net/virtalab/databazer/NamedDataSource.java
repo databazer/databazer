@@ -4,19 +4,19 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 /**
  * The NamedDataSource is {@link org.springframework.jdbc.datasource.SimpleDriverDataSource} from Spring Framework with name.
- * </br>
+ * <p></p>
  * Name field is only addition done in this class.
- * </br>
- * </br>
+ * <p></p>
+ * <p></p>
  * Where is name of DataSource useful?
- * <p>
+ * <p></p>
  * Name can be useful when dealing with ActiveJDBC DB class. They require name when using more that one connection.
- * <p>
- * <p>
+ * <p></p>
+ * <p></p>
  * Is it compulsory to set name when using this class ?
- * <p>
+ * <p></p>
  * No. But if you use {@link #getName()} without calling {@link #setName(String)} before, {@link java.lang.NullPointerException} will be thrown.
- * <p>
+ * <p></p>
  * By design all concrete DataSources in Databazer extend this class.
  */
 public class NamedDataSource extends SimpleDriverDataSource {
