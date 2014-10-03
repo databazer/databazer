@@ -12,3 +12,7 @@ target/
 
 #KDE files
 .directory
+
+#Release filed
+release.properties
+pom.xml.releaseBackup
