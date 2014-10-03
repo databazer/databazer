@@ -131,9 +131,12 @@ public class MySQLCreatorTest extends Assert {
                 .create();
 
         String exceptedUrl = "jdbc:mysql://localhost/db?profileSQL=true&characterEncoding=UTF-8";
+        String anotherValidUrl = "jdbc:mysql://localhost/db?characterEncoding=UTF-8&profileSQL=true";
+
         String actualUrl = ds.getUrl();
 
-        assertEquals(exceptedUrl, actualUrl);
+        boolean isUrlEquals = ( (actualUrl.equals(exceptedUrl)) || (actualUrl.equals(anotherValidUrl)) );
+        assertTrue(isUrlEquals);
     }
 
     @Test
@@ -150,9 +153,11 @@ public class MySQLCreatorTest extends Assert {
                 .create();
 
         String exceptedUrl = "jdbc:mysql://localhost/db?profileSQL=true&characterEncoding=UTF-8";
+        String anotherValidUrl = "jdbc:mysql://localhost/db?characterEncoding=UTF-8&profileSQL=true";
         String actualUrl = ds.getUrl();
 
-        assertEquals(exceptedUrl, actualUrl);
+        boolean isUrlEquals = ( (actualUrl.equals(exceptedUrl)) || (actualUrl.equals(anotherValidUrl)) );
+        assertTrue(isUrlEquals);
     }
 
     @Test

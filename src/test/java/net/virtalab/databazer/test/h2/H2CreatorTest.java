@@ -235,9 +235,11 @@ public class H2CreatorTest extends Assert {
                 .create();
 
         String expectedURL = "jdbc:h2:mem:testDb;DB_CLOSE_ON_EXIT=TRUE;MODE=MYSQL";
+        String anotherExpectedURL = "jdbc:h2:mem:testDb;MODE=MYSQL;DB_CLOSE_ON_EXIT=TRUE";
         String actualURL = ds.getUrl();
 
-        assertEquals(expectedURL,actualURL);
+        boolean isUrlValid = ( (actualURL.equals(expectedURL)) || (actualURL.equals(anotherExpectedURL)) );
+        assertTrue(isUrlValid);
     }
 
     @Test
