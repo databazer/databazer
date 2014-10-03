@@ -139,7 +139,7 @@
                     <plugin>
                         <groupId>com.github.github</groupId>
                         <artifactId>site-maven-plugin</artifactId>
-                        <version>0.9</version>
+                        <version>0.10</version>
                         <configuration>
                             <message>Group: ${project.groupId} Project: ${project.artifactId} Ver: ${project.version}</message>
                             <noJekyll>true</noJekyll>
