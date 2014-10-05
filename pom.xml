@@ -3,7 +3,7 @@
 
     <groupId>net.virtalab</groupId>
     <artifactId>databazer</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.4</version>
     <packaging>jar</packaging>
 
     <name>databazer</name>
